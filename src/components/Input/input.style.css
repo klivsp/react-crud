@@ -1,0 +1,32 @@
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.06px;
+  background: #4e5964;
+}
+
+.custom-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #e7eaf3;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 250px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.custom-input:focus {
+  border-color: #007bff;
+}
+
+.custom-input::placeholder {
+  color: #aaa;
+}
