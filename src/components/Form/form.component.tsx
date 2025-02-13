@@ -112,7 +112,12 @@ export function RegistrationForm({
 
       {buttons &&
         buttons.map((button: any, index: number) => (
-          <Button key={index} placeholder={button.name} type={button.type} />
+          <Button
+            key={index}
+            placeholder={button.name}
+            type={button.type}
+            className="save-button"
+          />
         ))}
     </form>
   );

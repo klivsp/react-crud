@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import DeleteIcon from '../../../assets/delete_icon.png';
-import EditIcon from '../../../assets/edit_icon.png';
-import Loader from '@/components/Loader/loader.component';
-import './card.style.css';
-import { useDeleteUserMutation } from '@/redux/slices/users-api';
+import React, { useState } from "react";
+import DeleteIcon from "../../../assets/delete_icon.png";
+import EditIcon from "../../../assets/edit_icon.png";
+import Loader from "@/components/Loader/loader.component";
+import "./card.style.css";
+import { useDeleteUserMutation } from "@/redux/slices/users-api";
 
 export interface Data {
   id: number;
@@ -31,7 +31,7 @@ const Card = ({ data, onDelete, onEdit }: WideCardProps) => {
         onDelete(recordId);
       }, 2000);
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
       setLoadingId(null);
     }
   };
@@ -64,7 +64,11 @@ const Card = ({ data, onDelete, onEdit }: WideCardProps) => {
                   <p>{item.email}</p>
                   <p>{item.phone}</p>
                   <div className="wide-card-actions">
-                    <img src={EditIcon} className="action-icon" onClick={() => onEdit(item)} />
+                    <img
+                      src={EditIcon}
+                      className="action-icon"
+                      onClick={() => onEdit(item)}
+                    />
                     <img
                       src={DeleteIcon}
                       className="action-icon"

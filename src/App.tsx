@@ -1,16 +1,16 @@
-import Button from './components/Button/button.component';
-import Card from './components/Grid/Card/card.component';
-import { useGetAllUsersQuery } from './redux/slices/users-api';
-import './index.css';
-import { useEffect, useRef, useState } from 'react';
-import Modal from './components/Modal/modal.component';
-import { RegistrationForm } from './components/Form/form.component';
+import Button from "./components/Button/button.component";
+import Card from "./components/Grid/Card/card.component";
+import { useGetAllUsersQuery } from "./redux/slices/users-api";
+import "./index.css";
+import { useEffect, useRef, useState } from "react";
+import Modal from "./components/Modal/modal.component";
+import { RegistrationForm } from "./components/Form/form.component";
 
 const formButtons: Array<any> = [
   {
-    name: 'save',
-    text: 'Save',
-    type: 'submit',
+    name: "Save",
+    text: "save",
+    type: "submit",
   },
 ];
 
@@ -36,15 +36,20 @@ const App = () => {
 
   const deleteItem = (id: number) => {
     if (id) {
-      setPersons((prevPersons: any) => prevPersons.filter((item: any) => item.id !== id));
+      setPersons((prevPersons: any) =>
+        prevPersons.filter((item: any) => item.id !== id)
+      );
     }
   };
 
   const addUsers = (user: any) => {
     setSelectedUser(null);
-    setPersons((prevPersons: any) => [...prevPersons, { ...user, id: prevPersons.length + 1 }]);
+    setPersons((prevPersons: any) => [
+      ...prevPersons,
+      { ...user, id: prevPersons.length + 1 },
+    ]);
     setIsModalOpen(false);
-    console.log(user, 'user');
+    console.log(user, "user");
   };
 
   const getUserToEdit = (user: any) => {
@@ -54,7 +59,9 @@ const App = () => {
 
   const editUser = (id: number, updatedUser: any) => {
     setPersons((prevPersons: any) =>
-      prevPersons.map((person: any) => (person.id === id ? { ...person, ...updatedUser } : person))
+      prevPersons.map((person: any) =>
+        person.id === id ? { ...person, ...updatedUser } : person
+      )
     );
     setIsModalOpen(false);
     setSelectedUser(null);
@@ -62,16 +69,30 @@ const App = () => {
 
   return (
     <div className="home-page">
-      <Button placeholder={'Create New User'} iconName={'add'} className="button" onClick={openModal} type="button" />
-      {isLoading ? <p>IS LOADng</p> : <Card data={persons} onDelete={deleteItem} onEdit={getUserToEdit} />}
+      {isLoading ? (
+        <div className="loader">
+          <span className="spinner"></span>
+          <h1>Loading Data</h1>
+        </div>
+      ) : (
+        <>
+          <Button
+            placeholder={"Create New User"}
+            iconName={"add"}
+            className="button"
+            onClick={openModal}
+            type="button"
+          />
+          <Card data={persons} onDelete={deleteItem} onEdit={getUserToEdit} />
+        </>
+      )}
       <Modal isOpen={isModalOpen} closeModal={closeModal} title="New User Info">
         <RegistrationForm
-          key={selectedUser ? selectedUser.id : 'new-user'} // Forces component re-render
+          key={selectedUser ? selectedUser.id : "new-user"} // Forces component re-render
           buttons={formButtons}
           addUsers={addUsers}
           user={selectedUser}
           editUser={editUser}
-          ref={formRef}
         />
       </Modal>
     </div>
