@@ -1,13 +1,11 @@
-'use client';
-
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { formFields } from '../../common/common-functions';
-import { registrationSchema } from '@/common/common-functions';
-import Button from '../Button/button.component';
-import CustomInput from '../Input/input.component';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import "./form.style.css";
+import * as z from "zod";
+import { formFields } from "../../common/common-functions";
+import { registrationSchema } from "@/common/common-functions";
+import Button from "../Button/button.component";
 
 interface FormProps {
   buttons?: any;
@@ -16,133 +14,106 @@ interface FormProps {
   editUser?: any;
 }
 
-export const RegistrationForm = forwardRef(({ buttons, addUsers, user, editUser }: FormProps, ref) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<z.infer<typeof registrationSchema>>({
+export function RegistrationForm({
+  buttons,
+  addUsers,
+  user,
+  editUser,
+}: FormProps) {
+  const form = useForm<z.infer<typeof registrationSchema>>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      name: '',
-      address: '',
-      username: '',
-      city: '',
-      email: '',
-      zipCode: '',
-      phone: '',
+      name: "",
+      address: "",
+      username: "",
+      city: "",
+      email: "",
+      zipCode: "",
+      phone: "",
       useGooglePlaces: false,
-      latitude: '',
-      longitude: '',
+      latitude: "",
+      longitude: "",
     },
-    mode: 'onChange',
   });
 
-  const useGooglePlaces = watch('useGooglePlaces');
-
   useEffect(() => {
-    reset(
-      user ?? {
-        name: '',
-        address: '',
-        username: '',
-        city: '',
-        email: '',
-        zipCode: '',
-        phone: '',
+    if (user) {
+      form.reset(user);
+    } else {
+      form.reset({
+        name: "",
+        address: "",
+        username: "",
+        city: "",
+        email: "",
+        zipCode: "",
+        phone: "",
         useGooglePlaces: false,
-        latitude: '',
-        longitude: '',
-      }
-    );
-  }, [user]);
-
-  useImperativeHandle(ref, () => ({
-    resetForm: () => {
-      reset({
-        name: '',
-        address: '',
-        username: '',
-        city: '',
-        email: '',
-        zipCode: '',
-        phone: '',
-        useGooglePlaces: false,
-        latitude: '',
-        longitude: '',
+        latitude: "",
+        longitude: "",
       });
-    },
-  }));
+    }
+  }, [user, form]);
 
   function onSubmit(data: z.infer<typeof registrationSchema>) {
     if (user) {
-      editUser?.(user.id, data);
+      editUser?.(user.id, data); // Update existing user
     } else {
-      addUsers?.(data);
+      addUsers?.(data); // Create new user
     }
-    reset();
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="form">
       <div className="formGrid">
-        {formFields.map((field) => {
-          if (field.condition && !field.condition(watch())) return null;
+        {formFields.map((field: any) => {
+          if (field.condition && !field.condition(form.getValues())) {
+            return null;
+          }
 
           return (
-            <Controller
-              key={field.name}
-              name={field.name}
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <CustomInput
-                  label={field.label}
-                  type={field.type}
-                  value={value}
-                  onChange={onChange}
-                  placeholder={field.placeholder}
-                  required={!!field.required}
-                />
+            <div key={field.name} className="formField">
+              <label className="label" htmlFor={field.name}>
+                {field.label}
+              </label>
+              <input
+                {...form.register(field.name)}
+                id={field.name}
+                type={field.type}
+                placeholder={field.placeholder}
+                className="input"
+              />
+              {form.formState.errors[
+                field.name as keyof typeof form.formState.errors
+              ] && (
+                <span className="error">
+                  {
+                    form.formState.errors[
+                      field.name as keyof typeof form.formState.errors
+                    ]?.message
+                  }
+                </span>
               )}
-            />
+            </div>
           );
         })}
-
-        {/* Checkbox for "Use Google Places" */}
-        <div className="checkboxContainer">
-          <label className="checkboxLabel">
-            <input type="checkbox" {...control.register('useGooglePlaces')} className="checkbox" />
-            <span className="checkboxText">Use Google Location</span>
-          </label>
-        </div>
-
-        {/* Conditional rendering of Latitude and Longitude fields */}
-        {useGooglePlaces && (
-          <>
-            <Controller
-              name="latitude"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <CustomInput label="Latitude" type="text" value={value} onChange={onChange} placeholder="Latitude" />
-              )}
-            />
-            <Controller
-              name="longitude"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <CustomInput label="Longitude" type="text" value={value} onChange={onChange} placeholder="Longitude" />
-              )}
-            />
-          </>
-        )}
       </div>
 
-      {/* Buttons */}
-      {buttons?.map((button: any, index: number) => (
-        <Button key={index} placeholder={button.text} type={button.type} className="save-button" />
-      ))}
+      <div className="checkboxContainer">
+        <label className="checkboxLabel">
+          <input
+            type="checkbox"
+            {...form.register("useGooglePlaces")}
+            className="checkbox"
+          />
+          <span className="checkboxText">Use Google Location</span>
+        </label>
+      </div>
+
+      {buttons &&
+        buttons.map((button: any, index: number) => (
+          <Button key={index} placeholder={button.name} type={button.type} />
+        ))}
     </form>
   );
-});
+}
