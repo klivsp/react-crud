@@ -1,11 +1,11 @@
-import React from 'react';
-import './loader.style.css';
+import React from "react";
+import "./loader.style.css";
 
 interface LoaderProps {
   message: string;
 }
 
-const Loader: React.FC<LoaderProps> = ({ message }) => {
+const Loader = ({ message }: LoaderProps) => {
   return (
     <div className="loader-overlay">
       <div className="spinner"></div>

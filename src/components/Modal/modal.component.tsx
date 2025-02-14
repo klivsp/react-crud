@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
-import "./modal.style.css"; // Add the styles for the modal here
+import "./modal.style.css";
 import closeIcon from "../../assets/x_button.svg";
 
 interface ModalProps {

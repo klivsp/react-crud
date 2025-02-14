@@ -100,7 +100,7 @@ const App = () => {
       )}
       <Modal isOpen={isModalOpen} closeModal={closeModal} title="New User Info">
         <RegistrationForm
-          key={selectedUser ? selectedUser.id : "new-user"} // Forces component re-render
+          key={selectedUser ? selectedUser.id : "new-user"}
           buttons={formButtons}
           addUsers={addUsers}
           user={selectedUser}

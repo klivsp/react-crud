@@ -38,15 +38,26 @@ export function RegistrationForm({
 
   useEffect(() => {
     if (user) {
-      form.reset(user);
+      form.reset({
+        name: user.name,
+        address: user.address.street,
+        city: user.address.city,
+        zipCode: user.address.zipcode,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        useGooglePlaces: user.useGooglePlaces || false,
+        latitude: user.address.gep.lat || "",
+        longitude: user.address.gep.lng || "",
+      });
     } else {
       form.reset({
         name: "",
         address: "",
-        username: "",
         city: "",
-        email: "",
         zipCode: "",
+        username: "",
+        email: "",
         phone: "",
         useGooglePlaces: false,
         latitude: "",
@@ -57,9 +68,9 @@ export function RegistrationForm({
 
   function onSubmit(data: z.infer<typeof registrationSchema>) {
     if (user) {
-      editUser?.(user.id, data); // Update existing user
+      editUser?.(user.id, data);
     } else {
-      addUsers?.(data); // Create new user
+      addUsers?.(data);
     }
   }
 

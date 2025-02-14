@@ -72,7 +72,7 @@ const Card = ({ data, onDelete, onEdit }: WideCardProps) => {
                     <img
                       src={DeleteIcon}
                       className="action-icon"
-                      onClick={() => deleteUser(item.id)} // Only calling deleteUser
+                      onClick={() => deleteUser(item.id)}
                     />
                   </div>
                 </div>

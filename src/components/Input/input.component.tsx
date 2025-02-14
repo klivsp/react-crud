@@ -1,5 +1,5 @@
-import React from 'react';
-import './input.style.css';
+import React from "react";
+import "./input.style.css";
 
 interface CustomInputProps {
   label: string;
@@ -10,7 +10,14 @@ interface CustomInputProps {
   required?: boolean;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({ label, type, value, onChange, placeholder, required = false }) => {
+const CustomInput = ({
+  label,
+  type,
+  value,
+  onChange,
+  placeholder,
+  required = false,
+}: CustomInputProps) => {
   return (
     <div className="custom-input-container">
       <label htmlFor={label} className="input-label">
