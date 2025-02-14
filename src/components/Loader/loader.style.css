@@ -31,3 +31,14 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 760px) {
+  .loader-overlay {
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    height: 180px;
+    margin: 10px auto;
+    gap: 0;
+  }
+}
