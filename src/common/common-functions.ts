@@ -8,7 +8,7 @@ export const registrationSchema = z.object({
   city: z.string(),
   email: z.string().email("Invalid email address"),
   zipCode: z.string(),
-  phone: z.string(),
+  phone: z.string().regex(/^\d{10}$/, "Invalid phone number"),
   useGooglePlaces: z.boolean().default(false),
   latitude: z.string().optional(),
   longitude: z.string().optional(),

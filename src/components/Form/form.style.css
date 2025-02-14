@@ -7,7 +7,7 @@
   margin-left: auto;
 }
 
-.formGrid {
+.form-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
@@ -15,15 +15,16 @@
 }
 
 @media (min-width: 768px) {
-  .formGrid {
+  .form-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.formField {
+.form-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
 }
 
 .label {
@@ -59,11 +60,11 @@
   margin-top: 4px;
 }
 
-.checkboxContainer {
+.checkbox-container {
   margin-bottom: 24px;
 }
 
-.checkboxLabel {
+.checkbox-label {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -79,7 +80,7 @@
   accent-color: #4f46e5;
 }
 
-.checkboxText {
+.checkbox-text {
   font-size: 14px;
   color: #333;
 }
@@ -90,4 +91,29 @@
   padding: 0;
   display: flex;
   justify-content: center;
+  cursor: pointer;
+}
+
+.suggestions {
+  border: 1px solid rgba(231, 234, 243, 1);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 55;
+
+  max-width: 250px;
+  padding: 0.25rem;
+  overflow-y: auto;
+}
+
+.suggestions li {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.suggestions li:hover {
+  background-color: rgba(60, 129, 252, 1);
+  color: white;
 }

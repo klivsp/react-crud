@@ -1,9 +1,14 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import "./form.style.css";
 import * as z from "zod";
-import { formFields, registrationSchema } from "../../common/common-functions";
+import usePlacesAutoComplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import "./form.style.css";
+import { formFields } from "../../common/common-functions";
+import { registrationSchema } from "@/common/common-functions";
 import Button from "../Button/button.component";
 
 interface FormProps {
@@ -35,6 +40,19 @@ export function RegistrationForm({
     },
   });
 
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutoComplete({
+    requestOptions: {
+      componentRestrictions: { country: "al" },
+    },
+    debounce: 300,
+  });
+
   const useGooglePlaces = form.watch("useGooglePlaces");
 
   useEffect(() => {
@@ -51,21 +69,20 @@ export function RegistrationForm({
         latitude: user.address.geo?.lat || "",
         longitude: user.address.geo?.lng || "",
       });
-    } else {
-      form.reset({
-        name: "",
-        address: "",
-        city: "",
-        zipCode: "",
-        username: "",
-        email: "",
-        phone: "",
-        useGooglePlaces: false,
-        latitude: "",
-        longitude: "",
-      });
     }
   }, [user, form]);
+
+  async function handleSelect(address: string) {
+    setValue(address, false);
+    clearSuggestions();
+
+    const results = await getGeocode({ address });
+    const { lat, lng } = await getLatLng(results[0]);
+
+    form.setValue("address", address);
+    form.setValue("latitude", lat.toString());
+    form.setValue("longitude", lng.toString());
+  }
 
   function onSubmit(data: z.infer<typeof registrationSchema>) {
     if (user) {
@@ -81,7 +98,6 @@ export function RegistrationForm({
         phone: data.phone,
         username: data.username,
       });
-      console.log(data, "data");
     } else {
       addUsers?.(data);
     }
@@ -89,14 +105,48 @@ export function RegistrationForm({
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="form">
-      <div className="formGrid">
-        {formFields.map((field: any) => {
-          if (field.condition && !field.condition(form.getValues())) {
-            return null;
+      <div className="form-grid">
+        {formFields.map((field) => {
+          if (field.name === "latitude" || field.name === "longitude") {
+            if (!useGooglePlaces) return null;
+          }
+
+          if (field.name === "address") {
+            return (
+              <div key={field.name} className="form-field">
+                <label className="label" htmlFor={field.name}>
+                  {field.label}
+                </label>
+                <input
+                  {...form.register(field.name)}
+                  id={field.name}
+                  type="text"
+                  placeholder={field.placeholder}
+                  className="input"
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                  }}
+                  disabled={!ready}
+                />
+                {status === "OK" && (
+                  <ul className="suggestions">
+                    {data.map((suggestion) => (
+                      <li
+                        key={suggestion.place_id}
+                        onClick={() => handleSelect(suggestion.description)}
+                      >
+                        {suggestion.description}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
           }
 
           return (
-            <div key={field.name} className="formField">
+            <div key={field.name} className="form-field">
               <label className="label" htmlFor={field.name}>
                 {field.label}
               </label>
@@ -107,15 +157,9 @@ export function RegistrationForm({
                 placeholder={field.placeholder}
                 className="input"
               />
-              {form.formState.errors[
-                field.name as keyof typeof form.formState.errors
-              ] && (
+              {form.formState.errors[field.name] && (
                 <span className="error">
-                  {
-                    form.formState.errors[
-                      field.name as keyof typeof form.formState.errors
-                    ]?.message
-                  }
+                  {form.formState.errors[field.name]?.message}
                 </span>
               )}
             </div>
@@ -123,8 +167,8 @@ export function RegistrationForm({
         })}
       </div>
 
-      <div className="checkboxContainer">
-        <label className="checkboxLabel">
+      <div className="checkbox-container">
+        <label className="checkbox-label">
           <input
             type="checkbox"
             {...form.register("useGooglePlaces")}

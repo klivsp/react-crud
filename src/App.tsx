@@ -8,6 +8,7 @@ import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import Modal from "./components/Modal/modal.component";
 import { RegistrationForm } from "./components/Form/form.component";
+import { useLoadScript } from "@react-google-maps/api";
 
 const formButtons: Array<any> = [
   {
@@ -23,12 +24,18 @@ const App = () => {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const formRef = useRef<any>(null);
 
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
+  });
+
   const openModal = () => setIsModalOpen(true);
 
   const closeModal = () => {
     setIsModalOpen(false);
     formRef.current?.resetForm();
-    console.log();
   };
 
   const { data: usersData, isLoading } = useGetAllUsersQuery();
@@ -48,12 +55,12 @@ const App = () => {
 
   const addUsers = (user: any) => {
     setSelectedUser(null);
+
     setPersons((prevPersons: any) => [
       ...prevPersons,
       { ...user, id: prevPersons.length + 1 },
     ]);
     setIsModalOpen(false);
-    console.log(user, "user");
 
     addUser(user)
       .unwrap()

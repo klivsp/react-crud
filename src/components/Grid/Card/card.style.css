@@ -87,4 +87,8 @@
   .wide-card-actions {
     justify-content: center;
   }
+
+  .card-header {
+    display: none;
+  }
 }

@@ -17,7 +17,6 @@ const Modal: React.FC<ModalProps> = ({
   closeModal,
   children,
   title,
-  buttons,
 }) => {
   if (!isOpen) return null;
 
@@ -26,11 +25,16 @@ const Modal: React.FC<ModalProps> = ({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
-          <img src={closeIcon} onClick={closeModal} height={30} width={30} />
+          <img
+            src={closeIcon}
+            onClick={closeModal}
+            height={30}
+            width={30}
+            style={{ cursor: "pointer" }}
+          />
         </div>
 
         {children}
-
         {/* <div className="modal-footer">
           {buttons.map((button: any) => {
             return <Button placeholder={button.text} />;
