@@ -1,8 +1,7 @@
-import React, { ReactNode } from 'react';
-import ReactDOM from 'react-dom';
-import './modal.style.css'; // Add the styles for the modal here
-import closeIcon from '../../assets/x_button.svg';
-import Button from '../Button/button.component';
+import React, { ReactNode } from "react";
+import ReactDOM from "react-dom";
+import "./modal.style.css"; // Add the styles for the modal here
+import closeIcon from "../../assets/x_button.svg";
 
 interface ModalProps {
   title?: string;
@@ -13,7 +12,13 @@ interface ModalProps {
   onSubmit?: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, children, title, buttons }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  closeModal,
+  children,
+  title,
+  buttons,
+}) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -33,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, children, title, butt
         </div> */}
       </div>
     </div>,
-    document.getElementById('modal-root') as HTMLElement
+    document.getElementById("modal-root") as HTMLElement
   );
 };
 

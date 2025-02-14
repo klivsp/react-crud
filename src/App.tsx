@@ -1,6 +1,9 @@
 import Button from "./components/Button/button.component";
 import Card from "./components/Grid/Card/card.component";
-import { useGetAllUsersQuery } from "./redux/slices/users-api";
+import {
+  useAddUserMutation,
+  useGetAllUsersQuery,
+} from "./redux/slices/users-api";
 import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import Modal from "./components/Modal/modal.component";
@@ -29,6 +32,7 @@ const App = () => {
   };
 
   const { data: usersData, isLoading } = useGetAllUsersQuery();
+  const [addUser] = useAddUserMutation();
 
   useEffect(() => {
     setPersons(usersData);
@@ -50,6 +54,14 @@ const App = () => {
     ]);
     setIsModalOpen(false);
     console.log(user, "user");
+
+    addUser(user)
+      .unwrap()
+      .then(() => {
+        user;
+        console.log("User has ben created");
+      })
+      .catch(() => console.error("Error creating user"));
   };
 
   const getUserToEdit = (user: any) => {

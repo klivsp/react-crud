@@ -1,44 +1,49 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from '@/common/common-functions.ts';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQuery } from "@/common/common-functions.ts";
 
 export const usersApi = createApi({
-  reducerPath: 'usersApi',
+  reducerPath: "usersApi",
   baseQuery: baseQuery(),
-  tagTypes: ['usersApi'],
+  tagTypes: ["usersApi"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<any, void>({
       query: () => ({
-        url: '/users',
-        method: 'GET',
+        url: "/users",
+        method: "GET",
       }),
-      providesTags: ['usersApi'],
+      providesTags: ["usersApi"],
     }),
     addUser: builder.mutation<any, any>({
       query(arg) {
         return {
-          url: '/users',
-          method: 'POST',
+          url: "/users",
+          method: "POST",
           body: arg,
         };
       },
-      invalidatesTags: ['usersApi'],
+      invalidatesTags: ["usersApi"],
     }),
     updateUser: builder.mutation<void, Partial<any>>({
       query: ({ id, ...data }) => ({
         url: `/user/${id}`,
-        method: 'PATCH',
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['usersApi'],
+      invalidatesTags: ["usersApi"],
     }),
     deleteUser: builder.mutation<number | string, number | string>({
       query: (id) => ({
         url: `/users/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['usersApi'],
+      invalidatesTags: ["usersApi"],
     }),
   }),
 });
 
-export const { useGetAllUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } = usersApi;
+export const {
+  useGetAllUsersQuery,
+  useAddUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} = usersApi;
