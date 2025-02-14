@@ -3,8 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "./form.style.css";
 import * as z from "zod";
-import { formFields } from "../../common/common-functions";
-import { registrationSchema } from "@/common/common-functions";
+import { formFields, registrationSchema } from "../../common/common-functions";
 import Button from "../Button/button.component";
 
 interface FormProps {
@@ -36,6 +35,8 @@ export function RegistrationForm({
     },
   });
 
+  const useGooglePlaces = form.watch("useGooglePlaces");
+
   useEffect(() => {
     if (user) {
       form.reset({
@@ -47,8 +48,8 @@ export function RegistrationForm({
         email: user.email,
         phone: user.phone,
         useGooglePlaces: user.useGooglePlaces || false,
-        latitude: user.address.gep.lat || "",
-        longitude: user.address.gep.lng || "",
+        latitude: user.address.geo?.lat || "",
+        longitude: user.address.geo?.lng || "",
       });
     } else {
       form.reset({
@@ -68,7 +69,19 @@ export function RegistrationForm({
 
   function onSubmit(data: z.infer<typeof registrationSchema>) {
     if (user) {
-      editUser?.(user.id, data);
+      editUser?.(user.id, {
+        address: {
+          street: data.address,
+          city: data.city,
+          zipcode: data.zipCode,
+          geo: { lat: data.latitude, lng: data.longitude },
+        },
+        email: data.email,
+        name: data.name,
+        phone: data.phone,
+        username: data.username,
+      });
+      console.log(data, "data");
     } else {
       addUsers?.(data);
     }
