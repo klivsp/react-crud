@@ -33,7 +33,7 @@
 .card-header {
   padding-left: 5px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
   font-family: Roboto;
   font-weight: 500;
@@ -56,4 +56,35 @@
 
 .wide-card-actions img {
   cursor: pointer;
+}
+.mobile-header {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .card-element {
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    height: 180px;
+    margin: 10px auto;
+    gap: 0;
+  }
+  .card-element p {
+    text-align: left;
+  }
+
+  .mobile-header {
+    display: block;
+    font-weight: 500;
+  }
+
+  .wide-card-actions {
+    justify-content: center;
+  }
 }

@@ -54,15 +54,27 @@ const Card = ({ data, onDelete, onEdit }: WideCardProps) => {
       <div className="cards">
         {data &&
           data.map((item) => (
-            <div key={item.id}>
+            <>
               {loadingId === item.id ? (
-                <Loader message="User is being deleted" />
+                <Loader message="User is being deleted" key={item.id} />
               ) : (
                 <div key={item.id} className="card-element">
-                  <p>{item.id}</p>
-                  <p>{item.name}</p>
-                  <p>{item.email}</p>
-                  <p>{item.phone}</p>
+                  <p>
+                    <span className="mobile-header">ID:</span>
+                    {item.id}
+                  </p>
+                  <p>
+                    <span className="mobile-header">Name:</span>
+                    {item.name}
+                  </p>
+                  <p>
+                    <span className="mobile-header">Email:</span>
+                    {item.email}
+                  </p>
+                  <p>
+                    <span className="mobile-header">Phone:</span>
+                    {item.phone}
+                  </p>
                   <div className="wide-card-actions">
                     <img
                       src={EditIcon}
@@ -77,7 +89,7 @@ const Card = ({ data, onDelete, onEdit }: WideCardProps) => {
                   </div>
                 </div>
               )}
-            </div>
+            </>
           ))}
       </div>
     </div>
